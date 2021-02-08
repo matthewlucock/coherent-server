@@ -1,0 +1,14 @@
+{
+  "include": ["**/*", "src/.d.ts"],
+
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "lib",
+    "strict": true,
+    "target": "es2019"
+  }
+}

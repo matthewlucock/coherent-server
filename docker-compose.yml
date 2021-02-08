@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  http:
+    depends_on:
+      - 'database'
+    build: '.'
+    ports:
+      - '${HTTP_PORT}:${HTTP_PORT}'
+    env_file: '.env'
+
+  database:
+    image: 'mongo'
+    ports:
+      - '27017:${DATABASE_PORT}'
+    logging:
+      driver: 'none'

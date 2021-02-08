@@ -1,0 +1,10 @@
+{
+  "extends": "standard-with-typescript",
+  "parserOptions": { "project": "./tsconfig.json" },
+  "ignorePatterns": ["lib"],
+
+  "rules": {
+    "max-len": ["error", { "code": 100, "ignoreStrings": true }],
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"]
+  }
+}
