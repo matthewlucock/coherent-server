@@ -2,7 +2,6 @@ import { EventEmitter } from 'events'
 
 import type WebSocket from 'ws'
 
-import { makeClientObject } from '../util'
 import type { AuthenticatedSession } from '../session'
 
 const SOCKET_TIMEOUT_DURATION = 30 * 1000
@@ -44,7 +43,7 @@ export class Socket extends EventEmitter {
       return
     }
 
-    this.rawSend(makeClientObject(data))
+    this.rawSend(data)
   }
 
   public invalidate (): void {

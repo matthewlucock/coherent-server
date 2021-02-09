@@ -1,3 +1,4 @@
+import { makeClientObject } from '../util'
 import type { AuthenticatedSession } from '../session'
 import type { Socket } from './'
 
@@ -36,6 +37,8 @@ class SocketManager {
   }
 
   public broadcast ({ userIds, type, data, excludedClientId }: BroadcastArgs): void {
+    data = makeClientObject(data)
+
     for (const userId of userIds) {
       const userSockets = this.sockets.get(userId)
       if (userSockets === undefined) continue
