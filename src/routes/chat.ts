@@ -3,7 +3,7 @@ import { Router } from 'express'
 import { getClientId, makeClientObject } from '../util'
 import type { Message } from '../database'
 import { validateSession } from '../session'
-import { validateObjectId } from '../validation'
+import { validateObjectId, validateInteger } from '../validation'
 import { createChat } from '../logic/chat'
 import { getMessages, submitMessage } from '../logic/message'
 
@@ -30,11 +30,20 @@ const filterMessage = (message: Message): FilteredMessage => {
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 chatRouter.get('/:chatId', async (request, response): Promise<void> => {
   if (!validateSession(request.session)) return
+
   const { chatId } = request.params
   validateObjectId(chatId, 'chat')
 
+  const beforeTime = (() => {
+    if (request.query.beforeTime === undefined) return Date.now()
+
+    const beforeTime = Number.parseInt(request.query.beforeTime as string)
+    validateInteger(beforeTime, { name: 'before time', validator: x => x > 0 })
+    return beforeTime
+  })()
+
   const { userId } = request.session
-  const messages = await getMessages({ chatId, userId })
+  const messages = await getMessages({ chatId, userId, beforeTime: new Date(beforeTime) })
 
   response.send(messages.map(filterMessage).map(makeClientObject))
 })

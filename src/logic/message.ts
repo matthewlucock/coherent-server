@@ -1,4 +1,4 @@
-import type { Cursor } from 'mongodb'
+import type { Cursor, FilterQuery } from 'mongodb'
 import httpError from 'http-errors'
 
 import { objectId } from '../util'
@@ -8,20 +8,23 @@ import { getChat } from './chat'
 import type { ChatArgs } from './chat'
 import { socketManager } from '../socket/manager'
 
-const getMessagesCursor = (database: Database, chatId: string): Cursor<Message> => (
-  database.messages.find({ chatId }).sort({ time: -1 })
+const getMessagesCursor = (database: Database, query: FilterQuery<Message>): Cursor<Message> => (
+  database.messages.find(query).sort({ time: -1 })
 )
 
-export const getMessages = async ({ chatId, userId }: ChatArgs): Promise<readonly Message[]> => {
+type GetMessagesArgs = ChatArgs & Readonly<{ beforeTime?: Date }>
+export const getMessages = async (
+  { chatId, userId, beforeTime }: GetMessagesArgs
+): Promise<readonly Message[]> => {
   await getChat({ chatId, userId })
 
   const database = await getDatabase()
-  return await getMessagesCursor(database, chatId).toArray()
+  return await getMessagesCursor(database, { chatId, time: { $lt: beforeTime } }).toArray()
 }
 
 export const getLatestMessage = async (chat: Chat): Promise<Message | null> => {
   const database = await getDatabase()
-  return await getMessagesCursor(database, chat._id).limit(1).next()
+  return await getMessagesCursor(database, { chatId: chat._id }).limit(1).next()
 }
 
 const validateMessageContent = (content: any): void => {
