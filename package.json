@@ -1,7 +1,8 @@
 {
   "scripts": {
     "lint": "eslint .",
-    "build": "rm -rf lib && tsc"
+    "build": "rm -rf lib && tsc",
+    "verify": "npm run lint && npm run build"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
