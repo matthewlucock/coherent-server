@@ -1,7 +1,6 @@
 import { Router } from 'express'
 
 import { getClientId, makeClientObject } from '../util'
-import type { Message } from '../database'
 import { validateSession } from '../session'
 import { validateObjectId, validateInteger } from '../validation'
 import { createChat } from '../logic/chat'
@@ -21,15 +20,10 @@ chatRouter.post('/create', async (request, response): Promise<void> => {
   response.send(makeClientObject(chat))
 })
 
-type FilteredMessage = Omit<Message, 'chatId'>
-const filterMessage = (message: Message): FilteredMessage => {
-  const { chatId, ...rest } = message
-  return rest
-}
-
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 chatRouter.get('/:chatId', async (request, response): Promise<void> => {
   if (!validateSession(request.session)) return
+  const { userId } = request.session
 
   const { chatId } = request.params
   validateObjectId(chatId, 'chat')
@@ -42,21 +36,29 @@ chatRouter.get('/:chatId', async (request, response): Promise<void> => {
     return beforeTime
   })()
 
-  const { userId } = request.session
   const messages = await getMessages({ chatId, userId, beforeTime: new Date(beforeTime) })
 
-  response.send(messages.map(filterMessage).map(makeClientObject))
+  const filteredMessages = messages.map(message => {
+    const { chatId, ...rest } = message
+    return rest
+  })
+  response.send(filteredMessages.map(makeClientObject))
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 chatRouter.post('/:chatId', async (request, response): Promise<void> => {
   if (!validateSession(request.session)) return
+  const { userId } = request.session
+
   const { chatId } = request.params
   validateObjectId(chatId, 'chat')
 
-  const { userId } = request.session
   const { content } = request.body
   const message = await submitMessage({ chatId, userId, clientId: getClientId(request), content })
 
-  response.send(makeClientObject(message))
+  const filteredMessage = (() => {
+    const { chatId, userId, ...rest } = message
+    return rest
+  })()
+  response.send(makeClientObject(filteredMessage))
 })
