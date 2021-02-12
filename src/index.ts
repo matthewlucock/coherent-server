@@ -9,7 +9,10 @@ const init = async (): Promise<void> => {
   await connectToDatabase()
 
   // temp
-  await signup({ username: 'testuser1', password: 'testuser1' })
+  await Promise.all([
+    signup({ username: 'testuser1', password: 'testuser1' }),
+    signup({ username: 'testuser2', password: 'testuser2' })
+  ])
 
   httpServer.on('upgrade', handleHttpUpgrade)
 
