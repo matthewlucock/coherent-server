@@ -51,7 +51,7 @@ export const createChat = async (
   const participantIds = [userId, partnerId]
 
   // This logic will have to change later for group chats
-  const existingChat = await database.chats.findOne({ participantIds: { $in: participantIds } })
+  const existingChat = await database.chats.findOne({ participantIds: { $all: participantIds } })
   if (existingChat !== null) throw new httpError.Forbidden('Chat already exists')
 
   const chat: Chat = {
