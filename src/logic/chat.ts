@@ -70,3 +70,14 @@ export const createChat = async (
 
   return chat
 }
+
+export const typing = async ({ chatId, userId }: ChatArgs): Promise<void> => {
+  const chat = await getChat({ chatId, userId })
+  ;(chat.participantIds as string[]).splice(chat.participantIds.indexOf(userId), 1)
+
+  socketManager.broadcast({
+    userIds: chat.participantIds as string[],
+    type: 'typing',
+    data: { chatId, userId }
+  })
+}

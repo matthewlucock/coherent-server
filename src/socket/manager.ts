@@ -5,8 +5,8 @@ import type { Socket } from './'
 type BroadcastArgs = Readonly<{
   userIds: readonly string[]
   type: string
-  data: object
-  excludedClientId: string
+  data: unknown
+  excludedClientId?: string
 }>
 
 class SocketManager {

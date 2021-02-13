@@ -4,6 +4,8 @@ import type WebSocket from 'ws'
 
 import type { AuthenticatedSession } from '../session'
 
+import { typing } from '../logic/chat'
+
 const SOCKET_TIMEOUT_DURATION = 30 * 1000
 const PING = 'ping'
 const PONG = 'pong'
@@ -75,6 +77,10 @@ export class Socket extends EventEmitter {
 
     const data = JSON.parse(rawData)
     if (data === PING) this.pong()
+
+    if (data.type === 'typing') {
+      typing({ chatId: data.data, userId: this.session.userId }).catch(console.error)
+    }
   }
 
   private readonly onClose = (): void => {
