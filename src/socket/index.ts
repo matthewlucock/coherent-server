@@ -2,13 +2,12 @@ import { EventEmitter } from 'events'
 
 import type WebSocket from 'ws'
 
+import { hasSessionExpired } from '../session'
 import type { AuthenticatedSession } from '../session'
-
-import { typing } from '../logic/chat'
+import { handleSocketMessage } from './message'
+import type { SocketMessage } from './message'
 
 const SOCKET_TIMEOUT_DURATION = 30 * 1000
-const PING = 'ping'
-const PONG = 'pong'
 
 type ConstructorArgs = Readonly<{
   rawSocket: Socket['rawSocket']
@@ -35,17 +34,17 @@ export class Socket extends EventEmitter {
     this.timeout = this.startTimeout()
   }
 
-  private rawSend (data: any): void {
-    this.rawSocket.send(JSON.stringify(data))
+  private rawSend (message: SocketMessage): void {
+    this.rawSocket.send(JSON.stringify(message))
   }
 
-  public send (data: any): void {
-    if (this.session.cookie.maxAge as number < 0) {
+  public send (type: string, data?: unknown): void {
+    if (hasSessionExpired(this.session)) {
       this.invalidate()
       return
     }
 
-    this.rawSend(data)
+    this.rawSend({ type, data })
   }
 
   public invalidate (): void {
@@ -64,22 +63,27 @@ export class Socket extends EventEmitter {
 
   private pong (): void {
     this.refreshTimeout()
-    this.rawSend(PONG)
+    this.send('pong')
   }
 
-  private readonly onMessage = (rawData: WebSocket.Data): void => {
-    if (this.session.cookie.maxAge as number < 0) {
+  private readonly onMessage = (rawMessage: WebSocket.Data): void => {
+    if (hasSessionExpired(this.session)) {
       this.invalidate()
       return
     }
 
-    if (typeof rawData !== 'string') return
+    if (typeof rawMessage !== 'string') {
+      console.error('Binary socket message')
+      return
+    }
 
-    const data = JSON.parse(rawData)
-    if (data === PING) this.pong()
+    const message: SocketMessage = JSON.parse(rawMessage)
 
-    if (data.type === 'typing') {
-      typing({ chatId: data.data, userId: this.session.userId }).catch(console.error)
+    if (message.type === 'ping') {
+      this.pong()
+    } else {
+      const { userId } = this.session
+      handleSocketMessage({ message, userId })
     }
   }
 

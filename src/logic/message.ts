@@ -57,7 +57,7 @@ export const submitMessage = async (
   await database.messages.insertOne(message)
 
   socketManager.broadcast({
-    userIds: chat.participantIds as string[],
+    recipients: chat.participantIds as string[],
     type: 'message',
     data: message,
     excludedClientId: clientId

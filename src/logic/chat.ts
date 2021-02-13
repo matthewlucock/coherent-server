@@ -62,7 +62,7 @@ export const createChat = async (
   await database.chats.insertOne(chat)
 
   socketManager.broadcast({
-    userIds: participantIds,
+    recipients: participantIds,
     type: 'chat',
     data: chat,
     excludedClientId: clientId
@@ -76,7 +76,7 @@ export const typing = async ({ chatId, userId }: ChatArgs): Promise<void> => {
   ;(chat.participantIds as string[]).splice(chat.participantIds.indexOf(userId), 1)
 
   socketManager.broadcast({
-    userIds: chat.participantIds as string[],
+    recipients: chat.participantIds as string[],
     type: 'typing',
     data: { chatId, userId }
   })

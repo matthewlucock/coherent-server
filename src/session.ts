@@ -44,3 +44,7 @@ export const destroySession = async (
     })
   })
 }
+
+export const hasSessionExpired = (session: AuthenticatedSession): boolean => (
+  session.cookie.maxAge as number < 0
+)

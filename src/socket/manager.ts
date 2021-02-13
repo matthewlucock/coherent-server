@@ -3,7 +3,7 @@ import type { AuthenticatedSession } from '../session'
 import type { Socket } from './'
 
 type BroadcastArgs = Readonly<{
-  userIds: readonly string[]
+  recipients: readonly string[]
   type: string
   data: unknown
   excludedClientId?: string
@@ -22,9 +22,7 @@ class SocketManager {
   }
 
   public add (socket: Socket): void {
-    socket.on('close', (): void => {
-      this.clearSocket(socket)
-    })
+    socket.on('close', (): void => this.clearSocket(socket))
 
     const { userId } = socket.session
     const userSockets = this.sockets.get(userId)
@@ -36,15 +34,15 @@ class SocketManager {
     }
   }
 
-  public broadcast ({ userIds, type, data, excludedClientId }: BroadcastArgs): void {
+  public broadcast ({ recipients, type, data, excludedClientId }: BroadcastArgs): void {
     data = makeClientObject(data)
 
-    for (const userId of userIds) {
+    for (const userId of recipients) {
       const userSockets = this.sockets.get(userId)
       if (userSockets === undefined) continue
 
       for (const socket of userSockets) {
-        if (socket.clientId !== excludedClientId) socket.send({ type, data })
+        if (socket.clientId !== excludedClientId) socket.send(type, data)
       }
     }
   }
