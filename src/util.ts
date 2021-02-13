@@ -5,6 +5,10 @@ import randomString from 'crypto-random-string'
 import { OBJECT_ID_LENGTH } from './globals'
 import type { User } from './database'
 
+export const simpleRemoveFromArray = <T>(array: T[], item: T): void => {
+  array.splice(array.indexOf(item), 1)
+}
+
 export const generateHttpStatusCodeHeader = (statusCode: number): string => (
   `HTTP/1.1 ${statusCode} ${httpStatus(statusCode)}\r\n\r\n`
 )

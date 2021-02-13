@@ -15,12 +15,11 @@ initRouter.get('/', async (request, response): Promise<void> => {
   const { userId } = request.session
 
   const chats = await getChatsForUser(userId)
-  const participantIds = new Set(chats.map(chat => chat.participantIds).flat())
-  participantIds.delete(userId)
+  const participantIds = chats.map(chat => chat.participantIds).flat()
 
   const [messages, users] = await Promise.all([
     Promise.all(chats.map(getLatestMessage)),
-    Promise.all(Array.from(participantIds).map(getUser)) as Promise<User[]>
+    Promise.all(participantIds.map(getUser)) as Promise<User[]>
   ])
 
   response.send({

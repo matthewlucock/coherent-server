@@ -1,6 +1,6 @@
 import httpError from 'http-errors'
 
-import { objectId } from '../util'
+import { simpleRemoveFromArray, objectId } from '../util'
 import { getDatabase } from '../database'
 import type { Chat } from '../database'
 import { socketManager } from '../socket/manager'
@@ -24,9 +24,7 @@ export const getChatsForUser = async (userId: string): Promise<readonly Chat[]> 
   const chats = await database.chats.find({ participantIds: userId }).toArray()
 
   // Filter the user ID out of the chats
-  for (const chat of chats) {
-    ;(chat.participantIds as string[]).splice(chat.participantIds.indexOf(userId), 1)
-  }
+  for (const chat of chats) simpleRemoveFromArray(chat.participantIds as string[], userId)
 
   return chats
 }
@@ -73,7 +71,7 @@ export const createChat = async (
 
 export const typing = async ({ chatId, userId }: ChatArgs): Promise<void> => {
   const chat = await getChat({ chatId, userId })
-  ;(chat.participantIds as string[]).splice(chat.participantIds.indexOf(userId), 1)
+  simpleRemoveFromArray(chat.participantIds as string[], userId)
 
   socketManager.broadcast({
     recipients: chat.participantIds as string[],
