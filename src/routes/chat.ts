@@ -1,10 +1,10 @@
 import { Router } from 'express'
 
-import { getClientId, makeClientObject } from '../util'
-import { validateSession } from '../session'
-import { validateObjectId, validateInteger } from '../validation'
-import { createChat } from '../logic/chat'
-import { getMessages, submitMessage } from '../logic/message'
+import { getClientId, makeClientObject } from 'coherent/util'
+import { validateSession } from 'coherent/session'
+import { validateObjectId, validateInteger } from 'coherent/validation'
+import { createChat } from 'coherent/logic/chat'
+import { getMessages, submitMessage } from 'coherent/logic/message'
 
 export const chatRouter = Router()
 

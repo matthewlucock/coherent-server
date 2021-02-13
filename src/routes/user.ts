@@ -1,11 +1,10 @@
 import { Router } from 'express'
 import httpError from 'http-errors'
 
-import { makeClientUser } from '../util'
-import { validateSession } from '../session'
-import { validateObjectId } from '../validation'
-
-import { getUser } from '../logic/user'
+import { makeClientUser } from 'coherent/util'
+import { validateSession } from 'coherent/session'
+import { validateObjectId } from 'coherent/validation'
+import { getUser } from 'coherent/logic/user'
 
 export const userRouter = Router()
 

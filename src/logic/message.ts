@@ -1,12 +1,12 @@
 import type { Cursor, FilterQuery } from 'mongodb'
 import httpError from 'http-errors'
 
-import { objectId } from '../util'
-import { getDatabase } from '../database'
-import type { Database, Chat, Message } from '../database'
+import { objectId } from 'coherent/util'
+import { getDatabase } from 'coherent/database'
+import type { Database, Chat, Message } from 'coherent/database'
+import { socketManager } from 'coherent/socket/manager'
 import { getChat } from './chat'
 import type { ChatArgs } from './chat'
-import { socketManager } from '../socket/manager'
 
 const getMessagesCursor = (database: Database, query: FilterQuery<Message>): Cursor<Message> => (
   database.messages.find(query).sort({ time: -1 })

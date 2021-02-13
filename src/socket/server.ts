@@ -4,9 +4,9 @@ import type { IncomingMessage } from 'http'
 import { Server as SocketServer } from 'ws'
 import type WebSocket from 'ws'
 
-import { generateHttpStatusCodeHeader } from '../util'
-import { clientIdIsValid } from '../validation'
-import { sessionParser, sessionIsAuthenticated } from '../session'
+import { generateHttpStatusCodeHeader } from 'coherent/util'
+import { clientIdIsValid } from 'coherent/validation'
+import { sessionParser, sessionIsAuthenticated } from 'coherent/session'
 import { Socket } from '.'
 import { socketManager } from './manager'
 

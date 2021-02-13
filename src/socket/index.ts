@@ -2,8 +2,8 @@ import { EventEmitter } from 'events'
 
 import type WebSocket from 'ws'
 
-import { hasSessionExpired } from '../session'
-import type { AuthenticatedSession } from '../session'
+import { hasSessionExpired } from 'coherent/session'
+import type { AuthenticatedSession } from 'coherent/session'
 import { handleSocketMessage } from './message'
 import type { SocketMessage } from './message'
 

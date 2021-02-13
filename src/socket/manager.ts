@@ -1,6 +1,6 @@
-import { makeClientObject } from '../util'
-import type { AuthenticatedSession } from '../session'
-import type { Socket } from './'
+import { makeClientObject } from 'coherent/util'
+import type { AuthenticatedSession } from 'coherent/session'
+import type { Socket } from '.'
 
 type BroadcastArgs = Readonly<{
   recipients: readonly string[]

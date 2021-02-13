@@ -1,5 +1,5 @@
-import { getDatabase } from '../database'
-import type { User } from '../database'
+import { getDatabase } from 'coherent/database'
+import type { User } from 'coherent/database'
 
 export const getUser = async (id: string): Promise<User | null> => {
   const database = await getDatabase()

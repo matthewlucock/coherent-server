@@ -1,16 +1,14 @@
 import { Router } from 'express'
 import httpError from 'http-errors'
 
-// import { makeClientUser } from '../util'
-import { makeClientUser, getClientId } from '../util' // temp
-import { sessionIsAuthenticated, destroySession } from '../session'
-import type { AuthenticatedSession } from '../session'
-
-import { signup, login } from '../logic/auth'
+import { makeClientUser, getClientId } from 'coherent/util'
+import { sessionIsAuthenticated, destroySession } from 'coherent/session'
+import type { AuthenticatedSession } from 'coherent/session'
+import { signup, login } from 'coherent/logic/auth'
 
 // temp
-import { createChat } from '../logic/chat'
-import { getDatabase } from '../database'
+import { createChat } from 'coherent/logic/chat'
+import { getDatabase } from 'coherent/database'
 
 export const authRouter = Router()
 

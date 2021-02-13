@@ -1,10 +1,10 @@
 import httpError from 'http-errors'
 import * as bcrypt from 'bcrypt'
 
-import { objectId } from '../util'
-import { getDatabase } from '../database'
-import type { User } from '../database'
-import { validateUsername, validatePassword } from '../validation'
+import { objectId } from 'coherent/util'
+import { getDatabase } from 'coherent/database'
+import type { User } from 'coherent/database'
+import { validateUsername, validatePassword } from 'coherent/validation'
 
 const INCORRECT_CREDENTIALS_ERROR_MESSAGE = 'Incorrect username or password'
 
