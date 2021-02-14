@@ -13,15 +13,20 @@ export const clientIdIsValid = (clientId: any): clientId is string => (
   typeof clientId === 'string' && clientId.length >= 10 && clientId.length <= 30
 )
 
-type ValidateIntegerOptions = Readonly<{
+type ParseAndValidateIntegerOptions = Readonly<{
   name: string
   validator: (x: number) => boolean
+  defaultValue: number
 }>
-export const validateInteger = (
-  value: number,
-  { name, validator }: ValidateIntegerOptions
-): void => {
+export const parseAndValidateInteger = (
+  rawValue: unknown,
+  { name, validator, defaultValue }: ParseAndValidateIntegerOptions
+): number => {
+  if (rawValue === undefined) return defaultValue
+
+  const value = Number.parseInt(rawValue as string)
   if (Number.isNaN(value) || !validator(value)) throw new httpError.BadRequest(`Invalid ${name}`)
+  return value
 }
 
 // TODO

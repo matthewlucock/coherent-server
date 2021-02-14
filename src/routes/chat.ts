@@ -2,7 +2,7 @@ import { Router } from 'express'
 
 import { getClientId, makeClientObject } from 'coherent/util'
 import { validateSession } from 'coherent/session'
-import { validateObjectId, validateInteger } from 'coherent/validation'
+import { validateObjectId, parseAndValidateInteger } from 'coherent/validation'
 import { createChat } from 'coherent/logic/chat'
 import { getMessages, submitMessage } from 'coherent/logic/message'
 
@@ -28,13 +28,11 @@ chatRouter.get('/:chatId', async (request, response): Promise<void> => {
   const { chatId } = request.params
   validateObjectId(chatId, 'chat')
 
-  const beforeTime = (() => {
-    if (request.query.beforeTime === undefined) return Date.now()
-
-    const beforeTime = Number.parseInt(request.query.beforeTime as string)
-    validateInteger(beforeTime, { name: 'before time', validator: x => x > 0 })
-    return beforeTime
-  })()
+  const beforeTime = parseAndValidateInteger(request.query.beforeTime, {
+    name: 'before time',
+    validator: x => x > 0,
+    defaultValue: Date.now()
+  })
 
   const messages = await getMessages({ chatId, userId, beforeTime: new Date(beforeTime) })
 
