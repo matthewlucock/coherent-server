@@ -12,14 +12,18 @@ const getMessagesCursor = (database: Database, query: FilterQuery<Message>): Cur
   database.messages.find(query).sort({ time: -1 })
 )
 
-type GetMessagesArgs = ChatArgs & Readonly<{ beforeTime?: Date }>
+type GetMessagesArgs = ChatArgs & Readonly<{
+  beforeTime: Date
+  limit: number
+}>
 export const getMessages = async (
-  { chatId, userId, beforeTime }: GetMessagesArgs
+  { chatId, userId, beforeTime, limit }: GetMessagesArgs
 ): Promise<readonly Message[]> => {
+  const database = await getDatabase()
   await getChat({ chatId, userId })
 
-  const database = await getDatabase()
-  return await getMessagesCursor(database, { chatId, time: { $lt: beforeTime } }).toArray()
+  const cursor = getMessagesCursor(database, { chatId, time: { $lt: beforeTime } }).limit(limit)
+  return await cursor.toArray()
 }
 
 export const getLatestMessage = async (chat: Chat): Promise<Message | null> => {

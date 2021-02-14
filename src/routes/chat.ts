@@ -28,13 +28,18 @@ chatRouter.get('/:chatId', async (request, response): Promise<void> => {
   const { chatId } = request.params
   validateObjectId(chatId, 'chat')
 
-  const beforeTime = parseAndValidateInteger(request.query.beforeTime, {
-    name: 'before time',
+  const beforeTime = new Date(parseAndValidateInteger(request.query.beforeTime, {
+    name: 'messages before time',
     validator: x => x > 0,
     defaultValue: Date.now()
+  }))
+  const limit = parseAndValidateInteger(request.query.quantity, {
+    name: 'messages quantity',
+    validator: x => x > 0,
+    defaultValue: 0
   })
 
-  const messages = await getMessages({ chatId, userId, beforeTime: new Date(beforeTime) })
+  const messages = await getMessages({ chatId, userId, beforeTime, limit })
 
   const filteredMessages = messages.map(message => {
     const { chatId, ...rest } = message
