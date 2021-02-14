@@ -1,11 +1,11 @@
 import { Router } from 'express'
 
-import { makeClientObject, makeClientUser } from 'coherent/util'
-import type { User } from 'coherent/database'
-import { validateSession } from 'coherent/session'
-import { getUser } from 'coherent/logic/user'
-import { getChatsForUser } from 'coherent/logic/chat'
-import { getLatestMessage } from 'coherent/logic/message'
+import { makeClientObject, makeClientUser } from '../util'
+import type { User } from '../database'
+import { validateSession } from '../session'
+import { getUser } from '../logic/user'
+import { getChatsForUser } from '../logic/chat'
+import { getLatestMessage } from '../logic/message'
 
 export const initRouter = Router()
 

@@ -1,4 +1,4 @@
-import { typing } from 'coherent/logic/chat'
+import { typing } from '../logic/chat'
 
 export type SocketMessage = Readonly<{
   type: string

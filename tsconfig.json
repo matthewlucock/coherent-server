@@ -9,7 +9,6 @@
     "moduleResolution": "node",
     "outDir": "lib",
     "strict": true,
-    "paths": { "coherent/*": ["src/*"] },
     "target": "es2019"
   }
 }

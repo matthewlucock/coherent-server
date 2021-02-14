@@ -1,9 +1,9 @@
 import httpError from 'http-errors'
 
-import { simpleRemoveFromArray, objectId } from 'coherent/util'
-import { getDatabase } from 'coherent/database'
-import type { Chat } from 'coherent/database'
-import { socketManager } from 'coherent/socket/manager'
+import { simpleRemoveFromArray, objectId } from '../util'
+import { getDatabase } from '../database'
+import type { Chat } from '../database'
+import { socketManager } from '../socket/manager'
 
 export type ChatArgs = Readonly<{ chatId: string, userId: string }>
 

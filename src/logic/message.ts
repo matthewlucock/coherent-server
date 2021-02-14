@@ -1,10 +1,10 @@
 import type { Cursor, FilterQuery } from 'mongodb'
 import httpError from 'http-errors'
 
-import { objectId } from 'coherent/util'
-import { getDatabase } from 'coherent/database'
-import type { Database, Chat, Message } from 'coherent/database'
-import { socketManager } from 'coherent/socket/manager'
+import { objectId } from '../util'
+import { getDatabase } from '../database'
+import type { Database, Chat, Message } from '../database'
+import { socketManager } from '../socket/manager'
 import { getChat } from './chat'
 import type { ChatArgs } from './chat'
 

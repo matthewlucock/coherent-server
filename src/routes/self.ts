@@ -1,9 +1,9 @@
 import { Router } from 'express'
 import httpError from 'http-errors'
 
-import { makeClientUser } from 'coherent/util'
-import { sessionIsAuthenticated, destroySession } from 'coherent/session'
-import { getUser } from 'coherent/logic/user'
+import { makeClientUser } from '../util'
+import { sessionIsAuthenticated, destroySession } from '../session'
+import { getUser } from '../logic/user'
 
 export const selfRouter = Router()
 
