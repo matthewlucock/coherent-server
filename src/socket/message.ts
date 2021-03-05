@@ -1,3 +1,4 @@
+import { handlePromiseRejection } from '../util'
 import { typing } from '../logic/chat'
 
 export type SocketMessage = Readonly<{
@@ -12,7 +13,7 @@ type HandleSocketMessageArgs = Readonly<{
 export const handleSocketMessage = ({ message, userId }: HandleSocketMessageArgs): void => {
   if (message.type === 'typing') {
     const chatId = message.data
-    typing({ chatId, userId }).catch(console.error)
+    handlePromiseRejection(typing({ chatId, userId }))
     return
   }
 

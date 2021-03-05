@@ -9,6 +9,10 @@ export const simpleRemoveFromArray = <T>(array: T[], item: T): void => {
   array.splice(array.indexOf(item), 1)
 }
 
+export const handlePromiseRejection = (promise: Promise<unknown>): void => {
+  promise.catch(console.error)
+}
+
 export const generateHttpStatusCodeHeader = (statusCode: number): string => (
   `HTTP/1.1 ${statusCode} ${httpStatus(statusCode)}\r\n\r\n`
 )
