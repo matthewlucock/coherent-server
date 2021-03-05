@@ -7,10 +7,10 @@ import { getUser } from '../logic/user'
 import { getChatsForUser } from '../logic/chat'
 import { getLatestMessage } from '../logic/message'
 
-export const initRouter = Router()
+export const initialDataRouter = Router()
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-initRouter.get('/', async (request, response): Promise<void> => {
+initialDataRouter.get('/', async (request, response): Promise<void> => {
   if (!validateSession(request.session)) return
   const { userId } = request.session
 

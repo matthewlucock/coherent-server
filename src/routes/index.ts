@@ -4,7 +4,7 @@ import { authRouter } from './auth'
 import { userRouter } from './user'
 import { selfRouter } from './self'
 import { chatRouter } from './chat'
-import { initRouter } from './init'
+import { initialDataRouter } from './initial-data'
 
 export const router = Router()
 
@@ -12,7 +12,7 @@ router.use('/auth', authRouter)
 router.use('/user', userRouter)
 router.use('/self', selfRouter)
 router.use('/chat', chatRouter)
-router.use('/init', initRouter)
+router.use('/initial-data', initialDataRouter)
 
 /**
  * Manually disabling @typescript-eslint/no-misused-promises when creating routes will be necessary

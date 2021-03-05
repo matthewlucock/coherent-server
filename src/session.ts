@@ -36,7 +36,7 @@ export const destroySession = async (
 ): Promise<void> => {
   return await new Promise((resolve, reject) => {
     session.destroy(error => {
-      if (error !== undefined) {
+      if (error !== null) {
         reject(error)
         return
       }
