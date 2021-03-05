@@ -1,7 +1,9 @@
 import type { Response } from 'express'
 import createSessionParser from 'express-session'
+import MongoStore from 'connect-mongo'
 import httpError from 'http-errors'
 
+import { connectToDatabase } from './database'
 import { socketManager } from './socket/manager'
 
 type Session = Express.Request['session']
@@ -12,6 +14,7 @@ const SESSION_LIFE = 1000 * 60 * 60 * 5
 
 export const sessionParser = createSessionParser({
   name: SESSION_NAME,
+  store: MongoStore.create({ clientPromise: connectToDatabase() }),
   secret: 'secret',
   cookie: { maxAge: SESSION_LIFE },
   saveUninitialized: false,
