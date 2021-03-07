@@ -8,7 +8,7 @@ import { validateUsername, validatePassword } from '../validation'
 
 const INCORRECT_CREDENTIALS_ERROR_MESSAGE = 'Incorrect username or password'
 
-type Auth = Readonly<{
+export type Auth = Readonly<{
   username: string
   password: string
 }>
