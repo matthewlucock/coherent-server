@@ -6,7 +6,7 @@ type MongoDocument = Readonly<{ _id: string }>
 type MongoArray<T> = T | readonly T[] // Typed this way because of how the Mongo API is typed
 
 export type UserData = Readonly<{
-  displayUsername: string
+  displayName: string
 }>
 export type User = MongoDocument & Readonly<{
   username: string

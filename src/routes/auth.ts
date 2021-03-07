@@ -1,10 +1,10 @@
 import { Router } from 'express'
 import httpError from 'http-errors'
 
-import { makeClientUser, getClientId } from '../util'
+import { getClientId } from '../util'
 import { sessionIsAuthenticated, destroySession } from '../session'
 import type { AuthenticatedSession } from '../session'
-import { signup, login } from '../logic/auth'
+import { register, login } from '../logic/auth'
 
 // temp
 import { createChat } from '../logic/chat'
@@ -13,24 +13,24 @@ import { getDatabase } from '../database'
 export const authRouter = Router()
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-authRouter.post('/signup', async (request, response) => {
+authRouter.post('/register', async (request, response) => {
   if (sessionIsAuthenticated(request.session)) {
     throw new httpError.Conflict('Already logged in')
   }
 
   const { username, password } = request.body
-  const user = await signup({ username, password })
+  const { userId } = await register({ username, password })
 
-  ;(request.session as AuthenticatedSession).userId = user._id
+  ;(request.session as AuthenticatedSession).userId = userId
 
   // temp
   const database = await getDatabase()
-  const otherUsers = await database.users.find({ _id: { $ne: user._id } }).toArray()
+  const otherUsers = await database.users.find({ _id: { $ne: userId } }).toArray()
   for (const otherUser of otherUsers) {
-    await createChat({ userId: user._id, partnerId: otherUser._id, clientId: getClientId(request) })
+    await createChat({ userId, partnerId: otherUser._id, clientId: getClientId(request) })
   }
 
-  response.send(makeClientUser(user))
+  response.end()
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -40,10 +40,10 @@ authRouter.post('/login', async (request, response) => {
   }
 
   const { username, password } = request.body
-  const user = await login({ username, password })
+  const { userId } = await login({ username, password })
 
-  ;(request.session as AuthenticatedSession).userId = user._id
-  response.send(makeClientUser(user))
+  ;(request.session as AuthenticatedSession).userId = userId
+  response.end()
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises

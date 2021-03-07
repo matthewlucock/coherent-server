@@ -12,8 +12,11 @@ type Auth = Readonly<{
   username: string
   password: string
 }>
+type AuthResult = Readonly<{
+  userId: string
+}>
 
-export const signup = async ({ username, password }: Auth): Promise<User> => {
+export const register = async ({ username, password }: Auth): Promise<AuthResult> => {
   validateUsername(username)
   validatePassword(password)
   const normalizedUsername = username.toLowerCase()
@@ -26,14 +29,14 @@ export const signup = async ({ username, password }: Auth): Promise<User> => {
     _id: objectId(),
     username: normalizedUsername,
     password: await bcrypt.hash(password, 10),
-    data: { displayUsername: username }
+    data: { displayName: username }
   }
 
   await database.users.insertOne(user)
-  return user
+  return { userId: user._id }
 }
 
-export const login = async ({ username, password }: Auth): Promise<User> => {
+export const login = async ({ username, password }: Auth): Promise<AuthResult> => {
   validateUsername(username)
   validatePassword(password)
   username = username.toLowerCase()
@@ -42,7 +45,7 @@ export const login = async ({ username, password }: Auth): Promise<User> => {
   const user = await database.users.findOne({ username })
   if (user === null) throw new httpError.Forbidden(INCORRECT_CREDENTIALS_ERROR_MESSAGE)
 
-  if (await bcrypt.compare(password, user.password)) return user
+  if (await bcrypt.compare(password, user.password)) return { userId: user._id }
 
   throw new httpError.Forbidden(INCORRECT_CREDENTIALS_ERROR_MESSAGE)
 }
