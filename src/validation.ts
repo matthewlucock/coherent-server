@@ -42,3 +42,9 @@ export const validateUsername = (username: any): void => {
   }
 }
 export const validatePassword = validateUsername
+
+export const validateDisplayName = (displayName: any): void => {
+  if (typeof displayName !== 'string' || displayName.length === 0) {
+    throw new httpError.BadRequest('Invalid display name')
+  }
+}

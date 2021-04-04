@@ -29,7 +29,7 @@ export const register = async ({ username, password }: Auth): Promise<AuthResult
     _id: objectId(),
     username: normalizedUsername,
     password: await bcrypt.hash(password, 10),
-    data: { displayName: username }
+    data: { displayName: '' }
   }
 
   await database.users.insertOne(user)
